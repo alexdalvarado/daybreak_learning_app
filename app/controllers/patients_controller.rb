@@ -1,33 +1,37 @@
 class PatientsController < ApplicationController
   def index
-    patients = [
-      { name: "Enzo", status: "Active" },
-      { name: "Alex", status: "Discharged" },
-      { name: "Liv", status: "Active" }
-    ]
-
+    patients = Patient.all
     render json: patients
   end
-  
- def show
-  patients = [
-    { name: "Enzo", status: "Active" },
-    { name: "Alex", status: "Discharged" },
-    { name: "Liv", status: "Active" }
-  ]
 
-  found = nil
-  patients.each do |patient|
-    if patient[:name] == params[:name]
-      found = patient
+  def create
+    patient = Patient.new(patient_params)
+
+    if patient.save
+      render json: patient, status: :created
+    else
+      render json: { errors: patient.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
-  if found
-    render json: found
-  else
-    render json: { error: "Patient not found" }
+  def active
+    patients = Patient.where(status: "Active")
+    render json: patients
   end
-end 
 
+  def show
+    patient = Patient.find_by(name: params[:name])
+
+    if patient
+      render json: patient
+    else
+      render json: { error: "Patient not found" }
+    end
+  end
+
+  private
+
+  def patient_params
+    params.expect(patient: [:name, :status])
+  end
 end

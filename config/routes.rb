@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   get "/patients", to: "patients#index"
+  post "/patients", to: "patients#create"
+  get "/patients/status/active", to: "patients#active"
   get "/patients/:name", to: "patients#show"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
