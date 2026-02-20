@@ -19,3 +19,7 @@ group :development, :test do
 end
 
 gem "faker", "~> 3.6"
+
+gem "rack-cors", "~> 3.0"
+
+gem "rspec-rails", "~> 8.0", groups: [:development, :test]
