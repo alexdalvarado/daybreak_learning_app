@@ -18,14 +18,29 @@ function App() {
         <thead>
           <tr style={{ borderBottom: '2px solid #e5e7eb', textAlign: 'left' }}>
             <th style={{ padding: '10px 12px', color: '#6b7280', fontWeight: 600, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Name</th>
+            <th style={{ padding: '10px 12px', color: '#6b7280', fontWeight: 600, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Priority</th>
             <th style={{ padding: '10px 12px', color: '#6b7280', fontWeight: 600, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Status</th>
             <th style={{ padding: '10px 12px', color: '#6b7280', fontWeight: 600, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Created</th>
+            <th style={{ padding: '10px 12px', color: '#6b7280', fontWeight: 600, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Last Seen</th>
           </tr>
         </thead>
         <tbody>
           {patients.map(patient => (
             <tr key={patient.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
               <td style={{ padding: '12px', fontWeight: 500 }}>{patient.name}</td>
+              <td style={{ padding: '12px' }}>
+                <span style={{
+                  display: 'inline-block',
+                  padding: '2px 10px',
+                  borderRadius: 9999,
+                  fontSize: 13,
+                  fontWeight: 500,
+                  backgroundColor: patient.priority === 'high' ? '#fef2f2' : patient.priority === 'low' ? '#f0f9ff' : '#f9fafb',
+                  color: patient.priority === 'high' ? '#991b1b' : patient.priority === 'low' ? '#1e40af' : '#4b5563',
+                }}>
+                  {patient.priority}
+                </span>
+              </td>
               <td style={{ padding: '12px' }}>
                 <span style={{
                   display: 'inline-block',
@@ -41,6 +56,9 @@ function App() {
               </td>
               <td style={{ padding: '12px', color: '#6b7280', fontSize: 14 }}>
                 {new Date(patient.created_at).toLocaleDateString()}
+              </td>
+              <td style={{ padding: '12px', color: '#6b7280', fontSize: 14 }}>
+                {patient.last_seen ? new Date(patient.last_seen).toLocaleString() : '—'}
               </td>
             </tr>
           ))}
