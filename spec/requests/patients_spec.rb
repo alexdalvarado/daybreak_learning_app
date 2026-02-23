@@ -24,6 +24,18 @@ RSpec.describe "Patients API", type: :request do
       patients = JSON.parse(response.body)
       expect(patients).to eq([])
     end
+
+    it "returns patients sorted by priority (high first)" do
+      Patient.create!(name: "Low", status: "Active", priority: "low")
+      Patient.create!(name: "High", status: "Active", priority: "high")
+      Patient.create!(name: "Normal", status: "Active", priority: "normal")
+
+      get "/patients"
+
+      patients = JSON.parse(response.body)
+      priorities = patients.map { |p| p["priority"] }
+      expect(priorities).to eq(%w[high normal low])
+    end
   end
 
   describe "GET /patients/:name" do
@@ -36,6 +48,16 @@ RSpec.describe "Patients API", type: :request do
       patient = JSON.parse(response.body)
       expect(patient["name"]).to eq("Enzo")
       expect(patient["status"]).to eq("Active")
+    end
+
+    it "updates last_seen when viewing a patient" do
+      patient = Patient.create!(name: "Enzo", status: "Active")
+      expect(patient.last_seen).to be_nil
+
+      get "/patients/Enzo"
+
+      patient.reload
+      expect(patient.last_seen).not_to be_nil
     end
 
     it "returns an error when the patient is not found" do

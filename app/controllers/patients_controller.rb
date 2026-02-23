@@ -1,6 +1,6 @@
 class PatientsController < ApplicationController
   def index
-    patients = Patient.all
+    patients = Patient.by_priority
     render json: patients
   end
 
@@ -15,7 +15,7 @@ class PatientsController < ApplicationController
   end
 
   def active
-    patients = Patient.where(status: "Active")
+    patients = Patient.where(status: "Active").by_priority
     render json: patients
   end
 
@@ -23,6 +23,7 @@ class PatientsController < ApplicationController
     patient = Patient.find_by(name: params[:name])
 
     if patient
+      patient.update(last_seen: Time.current)
       render json: patient
     else
       render json: { error: "Patient not found" }
@@ -32,6 +33,6 @@ class PatientsController < ApplicationController
   private
 
   def patient_params
-    params.expect(patient: [:name, :status])
+    params.expect(patient: [:name, :status, :priority])
   end
 end
