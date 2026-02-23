@@ -10,10 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_20_031306) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_23_135447) do
   create_table "patients", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.datetime "last_seen"
     t.string "name"
+    t.string "priority", default: "normal", null: false
     t.string "status"
     t.datetime "updated_at", null: false
   end
